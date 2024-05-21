@@ -1,3 +1,30 @@
+class NeuralNetwork {
+    constructor({ neuronCounts }) {
+        this.levels = []
+        for (let i = 0; i < neuronCounts.length - 1; i++) {
+            this.levels.push(
+                new Level({
+                    inputCount: neuronCounts[i],
+                    outputCount: neuronCounts[i + 1],
+                })
+            )
+        }
+    }
+    static feedForward({ givenInputs, network }) {
+        let outputs = Level.feedForward({
+            givenInputs,
+            level: network.levels[0],
+        })
+        for (let i = 0; i < network.levels.length; i++) {
+            outputs = Level.feedForward({
+                givenInputs: outputs,
+                level: network.levels[i],
+            })
+        }
+        return outputs
+    }
+}
+
 class Level {
     constructor({ inputCount, outputCount }) {
         this.inputs = new Array(inputCount)
